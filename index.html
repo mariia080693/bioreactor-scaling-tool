@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bioreactor Scaling Up Tool</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bioreactor Scaling Up Tool</h1>
+        </header>
+
+        <main class="reactors-container">
+            <!-- Source Reactor Section -->
+            <section class="reactor-section">
+                <h2>Source Reactor</h2>
+                <div class="reactor-content">
+                    <div class="reactor-image">
+                        <img src="prototype.PNG" alt="Source Reactor" id="sourceImage">
+                        <div class="reactor-label">
+                            <select id="sourceReactor">
+                                <option value="Sartorius_250mL">Sartorius 250mL</option>
+                                <option value="Sartorius_5L">Sartorius 5L</option>
+                                <option value="Cytiva_200L">Cytiva 200L</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="controls">
+                        <div class="control-group">
+                            <label for="workingVolume" id="workingVolumeLabel">Working Volume (L):</label>
+                            <input type="range" id="workingVolume" min="0.1" max="0.25" value="0.15" step="0.01">
+                            <span class="value" id="workingVolumeValue">0.150</span>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="stirrerSpeed" id="stirrerSpeedLabel">Stirrer Speed (RPM):</label>
+                            <input type="range" id="stirrerSpeed" min="100" max="4500" value="1000" step="10">
+                            <span class="value" id="stirrerSpeedValue">1000</span>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="gasFlowRate" id="gasFlowRateLabel">Gas Flow Rate (vvm):</label>
+                            <input type="range" id="gasFlowRate" min="0.01" max="1.0" value="0.1" step="0.001">
+                            <span class="value" id="gasFlowRateValue">0.100</span>
+                        </div>
+                    </div>
+
+                    <button class="run-button" id="runScaling">Run Scaling Tool</button>
+                </div>
+            </section>
+
+            <!-- Target Reactor Section -->
+            <section class="reactor-section">
+                <h2>Target Reactor</h2>
+                <div class="reactor-content">
+                    <div class="reactor-image">
+                        <img src="prototype_2.PNG" alt="Target Reactor" id="targetImage">
+                        <div class="reactor-label">
+                            <select id="targetReactor">
+                                <option value="Sartorius_5L">Sartorius 5L</option>
+                                <option value="Cytiva_200L">Cytiva 200L</option>
+                                <option value="Cytiva_2000L">Cytiva 2000L</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="controls">
+                        <p class="info-text">Please select a range of values for your target reactor.</p>
+                        
+                        <div class="control-group">
+                            <label for="targetWorkingVolume" id="targetWorkingVolumeLabel">Target Working Volume (L):</label>
+                            <input type="range" id="targetWorkingVolume" min="1" max="20" value="5" step="1">
+                            <span class="value" id="targetWorkingVolumeValue">5.00</span>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="targetStirrerSpeed" id="targetStirrerSpeedLabel">Target Stirrer Speed (RPM):</label>
+                            <input type="range" id="targetStirrerSpeed" min="10" max="300" value="150" step="1">
+                            <span class="value" id="targetStirrerSpeedValue">150</span>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="targetGasFlowRate" id="targetGasFlowRateLabel">Target Gas Flow Rate (vvm):</label>
+                            <input type="range" id="targetGasFlowRate" min="0.001" max="0.1" value="0.05" step="0.001">
+                            <span class="value" id="targetGasFlowRateValue">0.050</span>
+                        </div>
+
+                        <div class="advanced-settings">
+                            <p class="info-text">You can keep the default configuration weights or adjust them to your preferences.</p>
+                            
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="enableEditing">
+                                <label for="enableEditing">Enable editing</label>
+                            </div>
+
+                            <div class="weight-controls">
+                                <div class="weight-group">
+                                    <label>kLa:</label>
+                                    <input type="range" min="0" max="1" value="1" step="0.1" id="klaWeight">
+                                    <span>1.000</span>
+                                    
+                                    <label>Mixing Time:</label>
+                                    <input type="range" min="0" max="1" value="1" step="0.1" id="mixingWeight">
+                                    <span>1.000</span>
+                                    
+                                    <label>Shear:</label>
+                                    <input type="range" min="0" max="1" value="1" step="0.1" id="shearWeight">
+                                    <span>1.000</span>
+                                </div>
+                                
+                                <div class="weight-group">
+                                    <label>Gas Hold Up:</label>
+                                    <input type="range" min="0" max="1" value="1" step="0.1" id="gasHoldUpWeight">
+                                    <span>1.000</span>
+                                    
+                                    <label>Kolmogorov Scale:</label>
+                                    <input type="range" min="0" max="1" value="1" step="0.1" id="kolmogorovWeight">
+                                    <span>1.000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Results Section -->
+        <section class="results-section" id="resultsSection" style="display: none;">
+            <h2>Scaling Results</h2>
+            <div class="results-content">
+                <div class="result-item">
+                    <label>Recommended Stirrer Speed:</label>
+                    <span id="recommendedSpeed">-</span>
+                </div>
+                <div class="result-item">
+                    <label>Recommended Gas Flow Rate:</label>
+                    <span id="recommendedFlow">-</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Calculation Principles Section -->
+        <section class="principles-section" id="principlesSection" style="display: none;">
+            <h2>Calculation Principles</h2>
+            <div class="principles-content">
+                <div class="principle-item">
+                    <label>Stirrer Speed Formula:</label>
+                    <span class="formula" id="speedFormula">N₂ = N₁ × (V₁/V₂)^(1/3)</span>
+                </div>
+                <div class="principle-item">
+                    <label>Gas Flow Rate Formula:</label>
+                    <span class="formula" id="flowFormula">Q₂ = Q₁ × (V₂/V₁)</span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
